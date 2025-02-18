@@ -25,7 +25,7 @@
         }
 
         header {
-            background-color: #333;
+            background-color: #0c033d;
             padding: 15px;
             display: flex;
             align-items: center;
@@ -43,6 +43,7 @@
             margin: 0;
             flex-grow: 1;
             text-align: center;
+            text-shadow: 2px 2px 0px black, -2px -2px 0px black;
         }
 
         .button-container {
@@ -50,17 +51,21 @@
             gap: 10px;
         }
 
-        .button-container a {
+        .button {
             background-color: #ff6347;
             color: white;
+            text-align: center;
             padding: 10px 20px;
             font-size: 1.1em;
             border-radius: 5px;
             text-decoration: none;
+            border: 3px solid black;
+            font-weight: bold;
         }
 
-        .button-container a:hover {
+        .button:hover {
             background-color: #e55347;
+            border-color: black;
         }
 
         .menu {
@@ -74,14 +79,13 @@
             margin-bottom: 30px;
         }
 
-        /* شريط البحث */
         #searchBar {
             width: 100%;
             max-width: 400px;
             padding: 12px;
             font-size: 1.2em;
             margin-bottom: 20px;
-            border: 2px solid #ddd;
+            border: 2px solid #0c033d;
             border-radius: 5px;
             text-align: center;
             display: block;
@@ -100,7 +104,7 @@
             margin: 10px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 30%;
+            width: 45%;
             transition: transform 0.3s ease;
             cursor: pointer;
         }
@@ -112,21 +116,29 @@
             transition: transform 0.3s ease;
         }
 
-        .menu-item:hover {
-            transform: scale(1.05);
-        }
-
-        .menu-item img:active {
-            transform: scale(1.3);
-        }
-
-        /* رسالة عند عدم العثور على نتائج */
-        #noResults {
+        /* نافذة تكبير الصورة */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
             display: none;
-            color: red;
-            font-size: 1.2em;
-            margin-top: 10px;
-            text-align: center;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .overlay.active {
+            display: flex;
         }
 
         footer {
@@ -138,80 +150,30 @@
         }
 
         @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                text-align: center;
-            }
-
             .menu-item {
-                width: 45%;
-            }
-
-            .menu h2 {
-                font-size: 2em;
-            }
-
-            header h1 {
-                font-size: 2em;
-                margin-top: 10px;
-            }
-
-            .button-container {
-                flex-direction: column;
+                width: 90%;
             }
         }
-        .button-container {
-    display: flex;
-    gap: 10px; /* المسافة بين الأزرار */
-}
-
-.button {
-    background-color: #ff6347; /* لون الزر */
-    color: white;
-    text-align: center;
-    padding: 10px 20px;
-    font-size: 1.1em;
-    border-radius: 5px;
-    text-decoration: none;
-    border: 3px solid black; /* إطار أسود حول الأزرار */
-    font-weight: bold; /* جعل الخط أكثر وضوحًا */
-}
-
-.button:hover {
-    background-color: #e55347;
-    border-color: #000; /* تغيير لون الإطار عند التمرير */
-}
-
-
     </style>
 </head>
 <body>
 
-    <header style="background-color: #0c033d; padding: 10px 0;">
-        <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+    <header>
+        <div class="container">
             <img src="logo.png" alt="شعار المطعم">
-            <h1 style="color: white; text-shadow: 2px 2px 0px black, -2px -2px 0px black, -2px 2px 0px black, 2px -2px 0px black;">
-                مـــطـــعـــم الأذواق
-            </h1>
-            
+            <h1>مـــطـــعـــم الأذواق</h1>
             <div class="button-container">
                 <a href="contact.html" class="button">اتصل بنا</a>
                 <a href="https://maps.app.goo.gl/WN6z67UDFG72CTLV9" class="button">موقع المطعم</a>
             </div>            
         </div>
     </header>
-    
 
     <section class="menu">
         <div class="container">
-            <h2 class="menu-title">قــــائمة الطـــــعام</h2>
+            <h2>قــــائمة الطـــــعام</h2>
 
-
-            <!-- شريط البحث -->
-            <input type="text" id="searchBar" placeholder="ابحث عن أكلة باللغة العربية..." 
-            onkeyup="searchMenu()" 
-            style="border: 2px solid #0c033d; padding: 10px; border-radius: 5px; outline: none;">
-     
+            <input type="text" id="searchBar" placeholder="ابحث عن أكلة باللغة العربية..." onkeyup="searchMenu()">
 
             <div class="menu-items">
                 <div class="menu-item"><img src="img1.jpg" alt="" onclick="zoomImage(this)"></div>
@@ -226,40 +188,34 @@
                 <div class="menu-item"><img src="img10.jpg" alt="قازوز مشروبات غازية عصير " onclick="zoomImage(this)"></div>
                 <div class="menu-item"><img src="img11.jpg" alt="مشويات شوا الشواء" onclick="zoomImage(this)"></div>
             </div>
-
-            <!-- رسالة عند عدم العثور على نتائج -->
-            <p id="noResults">⚠️ لم يتم العثور على نتائج</p>
         </div>
     </section>
 
+    <div class="overlay" onclick="closeZoom()">
+        <img id="zoomedImage" src="" alt="تكبير الصورة">
+    </div>
+
     <script>
+        function zoomImage(image) {
+            let overlay = document.querySelector('.overlay');
+            let zoomedImage = document.getElementById('zoomedImage');
+            
+            zoomedImage.src = image.src;
+            overlay.classList.add('active');
+        }
+
+        function closeZoom() {
+            document.querySelector('.overlay').classList.remove('active');
+        }
+
         function searchMenu() {
             let input = document.getElementById("searchBar").value.toLowerCase();
             let menuItems = document.querySelectorAll(".menu-item");
-            let noResults = document.getElementById("noResults");
-            let found = false;
 
             menuItems.forEach(item => {
                 let itemName = item.querySelector("img").alt.toLowerCase();
-                if (itemName.includes(input)) {
-                    item.style.display = "block";
-                    found = true;
-                } else {
-                    item.style.display = "none";
-                }
+                item.style.display = itemName.includes(input) ? "block" : "none";
             });
-
-            noResults.style.display = found ? "none" : "block";
-        }
-
-        function zoomImage(image) {
-            if (image.classList.contains('active-image')) {
-                image.classList.remove('active-image');
-            } else {
-                let allImages = document.querySelectorAll('.menu-item img');
-                allImages.forEach(img => img.classList.remove('active-image'));
-                image.classList.add('active-image');
-            }
         }
     </script>
 
