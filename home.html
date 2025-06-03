@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>قائمة الطعام</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Tajawal", sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .overlay.active {
+      display: flex;
+    }
+
+    .overlay-content {
+      max-width: 100%;
+      max-height: 100%;
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .overlay img {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 16px;
+      object-fit: contain;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      background-color: #28a745;
+      color: wheat;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #218838;
+    }
+
+    .btn i {
+      font-size: 18px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: transparent;
+      border: none;
+      font-size: 32px;
+      color: rgb(4, 0, 255);
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .btn {
+        font-size: 14px;
+        padding: 10px 16px;
+      }
+    }
+
+ /* رسالة ترحيبية */
+.top-welcome {
+  position: fixed;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #e74c3c; /* أحمر أنيق */
+  color: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 9999;
+  animation: slideDown 0.6s ease forwards, fadeOutUp 1s ease forwards 3s;
+}
+
+@keyframes slideDown {
+  to {
+    top: 20px;
+  }
+}
+
+@keyframes fadeOutUp {
+  to {
+    opacity: 0;
+    top: -100px;
+  }
+}
+
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="gallery">  
+  <img src="panar.jpg" alt="صورة 1">
+  <img src="logo.png" alt="صورة 1">
+  <img src="img1.jpg" alt="صورة 2">
+  <img src="img2.jpg" alt="صورة 3">
+  <img src="img3.jpg" alt="صورة 4">
+  <img src="img4.jpg" alt="صورة 5">
+  <img src="img5.jpg" alt="صورة 6">
+  <img src="img6.jpg" alt="صورة 7">
+  <img src="img7.jpg" alt="صورة 8">
+  <img src="img8.jpg" alt="صورة 9">
+  <img src="img9.jpg" alt="صورة 10">
+  <img src="img10.jpg" alt="صورة 11">
+  <img src="img11.jpg" alt="صورة 12">
+  <!-- أضف المزيد حسب الحاجة -->
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="overlay-content">
+    <button class="close-btn" onclick="closeOverlay()">&times;</button>
+    <img id="overlayImage" src="" alt="صورة مكبرة">
+    <div class="buttons">
+      <a href="tel:+213549346350" class="btn"><i class="fas fa-phone"></i> تواصل معنا</a>
+      <a href="https://maps.app.goo.gl/WN6z67UDFG72CTLV9" class="btn" target="_blank"><i class="fas fa-map-marker-alt"></i> موقع المطعم</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const galleryImages = document.querySelectorAll('.gallery img');
+  const overlay = document.getElementById('overlay');
+  const overlayImage = document.getElementById('overlayImage');
+
+  galleryImages.forEach(img => {
+    img.addEventListener('click', () => {
+      overlayImage.src = img.src;
+      overlay.classList.add('active');
+    });
+  });
+
+  function closeOverlay() {
+    overlay.classList.remove('active');
+  }
+
+  // إغلاق عند الضغط خارج الصورة
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      closeOverlay();
+    }
+  });
+
+
+</script>
+
+
+
+<div class="top-welcome" id="topWelcome">
+ 👋 مرحبًا بك في مطعم الأذواق!
+</div>
+
+
+</body>
+</html>
